@@ -80,10 +80,17 @@
       <span class="memory-indicator" id="memoryIndicator">M</span>
       <div class="expression-preview" id="expressionDisplay" aria-live="polite"></div>
       <div class="main-result" id="mainResult" aria-live="assertive">0</div>
+      <button class="copy-btn" id="copyResultBtn" type="button">Copy</button>
+    </div>
+
+    <div class="tab-bar" role="tablist" aria-label="Calculator modes">
+      <button class="tab-btn active" data-tab="basic" type="button">Basic</button>
+      <button class="tab-btn" data-tab="scientific" type="button">Scientific</button>
+      <button class="tab-btn" data-tab="advanced" type="button">Advanced</button>
     </div>
 
     <!-- 3. Calculator Main Body & Keypads -->
-    <div class="calculator-body">
+    <div class="calculator-body basic-mode" id="calculatorBody">
       
       <!-- Scientific Keypad Drawer -->
       <div class="scientific-panel" id="scientificPanel">
@@ -133,6 +140,112 @@
       </div>
     </div>
 
+    <div class="advanced-panel" id="advancedPanel" aria-live="polite">
+      <div class="module-tabs" role="tablist" aria-label="Advanced modules">
+        <button class="module-tab active" data-module="stats" type="button">Stats</button>
+        <button class="module-tab" data-module="matrix" type="button">Matrix</button>
+        <button class="module-tab" data-module="complex" type="button">Complex</button>
+        <button class="module-tab" data-module="graph" type="button">Graph</button>
+        <button class="module-tab" data-module="units" type="button">Units</button>
+        <button class="module-tab" data-module="programming" type="button">Prog</button>
+        <button class="module-tab" data-module="calculus" type="button">Calculus</button>
+        <button class="module-tab" data-module="custom" type="button">Funcs</button>
+      </div>
+
+      <div class="module-content active" id="statsModule">
+        <label class="module-label" for="statsInput">Dataset</label>
+        <textarea id="statsInput" rows="3" placeholder="1, 2, 3, 4, 5"></textarea>
+        <div class="action-row">
+          <button class="module-btn" id="statsComputeBtn" type="button">Compute</button>
+          <button class="module-btn secondary" id="statsUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <div class="result-card" id="statsOutput"></div>
+      </div>
+
+      <div class="module-content" id="matrixModule">
+        <label class="module-label" for="matrixInput">Matrix</label>
+        <textarea id="matrixInput" rows="3" placeholder="1,2;3,4"></textarea>
+        <div class="action-row">
+          <button class="module-btn" id="matrixComputeBtn" type="button">Operate</button>
+          <button class="module-btn secondary" id="matrixUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <div class="result-card" id="matrixOutput"></div>
+      </div>
+
+      <div class="module-content" id="complexModule">
+        <label class="module-label" for="complexInput">Complex number</label>
+        <input id="complexInput" type="text" placeholder="3+4i" />
+        <div class="action-row">
+          <button class="module-btn" id="complexComputeBtn" type="button">Calculate</button>
+          <button class="module-btn secondary" id="complexUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <div class="result-card" id="complexOutput"></div>
+      </div>
+
+      <div class="module-content" id="graphModule">
+        <label class="module-label" for="graphInput">Function</label>
+        <input id="graphInput" type="text" placeholder="sin(x)" />
+        <div class="action-row">
+          <button class="module-btn" id="graphPlotBtn" type="button">Plot</button>
+          <button class="module-btn secondary" id="graphUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <canvas id="graphCanvas" width="320" height="220"></canvas>
+      </div>
+
+      <div class="module-content" id="unitsModule">
+        <label class="module-label" for="unitValue">Value</label>
+        <input id="unitValue" type="number" value="1" />
+        <div class="inline-fields">
+          <select id="unitCategory">
+            <option value="length">Length</option>
+            <option value="mass">Mass</option>
+            <option value="temperature">Temperature</option>
+            <option value="volume">Volume</option>
+            <option value="speed">Speed</option>
+          </select>
+          <select id="unitFrom"></select>
+          <select id="unitTo"></select>
+        </div>
+        <button class="module-btn" id="unitConvertBtn" type="button">Convert</button>
+        <div class="result-card" id="unitOutput"></div>
+      </div>
+
+      <div class="module-content" id="programmingModule">
+        <label class="module-label" for="programInput">Value</label>
+        <input id="programInput" type="number" value="10" />
+        <div class="action-row">
+          <button class="module-btn" id="programConvertBtn" type="button">Convert</button>
+          <button class="module-btn secondary" id="programBitBtn" type="button">Bitwise</button>
+        </div>
+        <div class="result-card" id="programOutput"></div>
+      </div>
+
+      <div class="module-content" id="calculusModule">
+        <label class="module-label" for="calcFunction">Function</label>
+        <input id="calcFunction" type="text" placeholder="x^2" />
+        <div class="inline-fields">
+          <input id="calcPoint" type="number" value="2" />
+          <select id="calcMode">
+            <option value="derivative">Derivative</option>
+            <option value="integral">Integral</option>
+            <option value="limit">Limit</option>
+          </select>
+        </div>
+        <button class="module-btn" id="calcRunBtn" type="button">Run</button>
+        <div class="result-card" id="calcOutput"></div>
+      </div>
+
+      <div class="module-content" id="customModule">
+        <label class="module-label" for="customInput">Function or variable</label>
+        <input id="customInput" type="text" placeholder="f(x)=x^2+2x+1" />
+        <div class="action-row">
+          <button class="module-btn" id="customSaveBtn" type="button">Save</button>
+          <button class="module-btn secondary" id="customUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <div class="result-card" id="customOutput"></div>
+      </div>
+    </div>
+
     <!-- 4. History Slide-Over Glass Drawer -->
     <div class="history-drawer" id="historyDrawer">
       <div class="history-header">
@@ -156,6 +269,7 @@
   <script src="js/audio.js"></script>
   <script src="js/mathEngine.js"></script>
   <script src="js/calculator.js"></script>
+  <script src="js/advancedModules.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

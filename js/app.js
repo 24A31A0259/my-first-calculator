@@ -34,6 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.appendChild(ripple);
       setTimeout(() => ripple.remove(), 500);
 
+      if (type === 'digit' && /^[0-9]$/.test(val)) {
+        audio.playDigitSound(val);
+      } else {
+        audio.playKeySound(type);
+      }
+
       // Delegate input to calculator controller
       calc.handleInput(val, type);
     });
@@ -50,14 +56,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 4. Scientific Mode Toggle Controller
+  // 4. Mode Toggle Controller
   const sciToggleBtn = document.getElementById('sciToggleBtn');
+  const body = document.getElementById('calculatorBody');
+  const container = document.getElementById('calculatorContainer');
+
+  const setMode = (mode) => {
+    body.classList.remove('mode-basic', 'mode-scientific', 'mode-advanced');
+    body.classList.add(`mode-${mode}`);
+    container.classList.toggle('scientific-active', mode === 'scientific' || mode === 'advanced');
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.tab === mode);
+    });
+
+    sciToggleBtn.classList.toggle('active', mode === 'scientific' || mode === 'advanced');
+  };
+
+  setMode('basic');
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setMode(btn.dataset.tab);
+    });
+  });
+
   sciToggleBtn.addEventListener('click', () => {
-    const isSci = calc.toggleScientific();
-    if (isSci) {
-      sciToggleBtn.classList.add('active');
-    } else {
-      sciToggleBtn.classList.remove('active');
+    const nextMode = body.classList.contains('mode-scientific') ? 'basic' : 'scientific';
+    setMode(nextMode);
+  });
+
+  document.getElementById('copyResultBtn').addEventListener('click', async () => {
+    const text = document.getElementById('mainResult').textContent;
+    if (text) {
+      await navigator.clipboard.writeText(text);
     }
   });
 

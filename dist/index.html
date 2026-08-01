@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cyber">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossy Glow Calculator - Spatial Glassmorphism UI</title>
+  <meta name="description" content="A futuristic, modern glassmorphism web calculator combining VisionOS spatial aesthetics, Nothing OS typography, and Apple design with neon glows and smooth sound feedback.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" crossorigin href="/assets/index-B4xE_hSg.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Backdrop Spheres -->
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+  <div class="ambient-glow glow-3"></div>
+
+  <!-- Main Floating Glass Container -->
+  <div class="calculator-container" id="calculatorContainer">
+    
+    <!-- 1. Header Controls -->
+    <header class="header-bar">
+      <div class="brand-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
+        <span>GLOW</span>
+        <span class="brand-badge">PRO</span>
+      </div>
+
+      <div class="header-actions">
+        <!-- Audio Sound Toggle -->
+        <button class="icon-btn active" id="audioToggleBtn" title="Toggle Sound Feedback" aria-label="Toggle Sound">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+        </button>
+
+        <!-- Scientific Mode Toggle -->
+        <button class="icon-btn" id="sciToggleBtn" title="Scientific Calculator Mode" aria-label="Scientific Mode">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+        </button>
+
+        <!-- History Drawer Button -->
+        <button class="icon-btn" id="historyToggleBtn" title="Calculation History" aria-label="History">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </button>
+
+        <!-- Theme Picker Button -->
+        <button class="icon-btn" id="themeMenuBtn" title="Change Neon Theme" aria-label="Themes">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a7 7 0 0 0 7 7c0 2-2 3-2 5a3 3 0 0 0 3 3 5 5 0 0 1-5 5"/></svg>
+        </button>
+
+        <!-- Theme Dropdown Menu -->
+        <div class="theme-menu" id="themeMenu">
+          <div class="theme-option selected" data-theme="cyber">
+            <span class="theme-dot" style="background: #00f3ff; box-shadow: 0 0 8px #00f3ff;"></span>
+            <span>Cyber Neon</span>
+          </div>
+          <div class="theme-option" data-theme="vision">
+            <span class="theme-dot" style="background: #70a1ff; box-shadow: 0 0 8px #70a1ff;"></span>
+            <span>Vision Crystal</span>
+          </div>
+          <div class="theme-option" data-theme="emerald">
+            <span class="theme-dot" style="background: #00ff88; box-shadow: 0 0 8px #00ff88;"></span>
+            <span>Emerald Gloss</span>
+          </div>
+          <div class="theme-option" data-theme="monochrome">
+            <span class="theme-dot" style="background: #ffffff; box-shadow: 0 0 8px #ffffff;"></span>
+            <span>Nothing Mono</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. Inset Glass Display Panel -->
+    <div class="display-panel" id="displayPanel">
+      <span class="memory-indicator" id="memoryIndicator">M</span>
+      <div class="expression-preview" id="expressionDisplay" aria-live="polite"></div>
+      <div class="main-result" id="mainResult" aria-live="assertive">0</div>
+      <button class="copy-btn" id="copyResultBtn" type="button">Copy</button>
+    </div>
+
+    <div class="tab-bar" role="tablist" aria-label="Calculator modes">
+      <button class="tab-btn active" data-tab="basic" type="button">Basic</button>
+      <button class="tab-btn" data-tab="scientific" type="button">Scientific</button>
+      <button class="tab-btn" data-tab="advanced" type="button">Advanced</button>
+    </div>
+
+    <!-- 3. Calculator Main Body & Keypads -->
+    <div class="calculator-body basic-mode" id="calculatorBody">
+      
+      <!-- Scientific Keypad Drawer -->
+      <div class="scientific-panel" id="scientificPanel">
+        <button class="btn-glass btn-sci" id="angleModeBtn" data-value="DEG">DEG</button>
+        <button class="btn-glass btn-sci" data-value="sin" data-type="sci">sin</button>
+        <button class="btn-glass btn-sci" data-value="cos" data-type="sci">cos</button>
+        <button class="btn-glass btn-sci" data-value="tan" data-type="sci">tan</button>
+        <button class="btn-glass btn-sci" data-value="log" data-type="sci">log</button>
+        <button class="btn-glass btn-sci" data-value="ln" data-type="sci">ln</button>
+        <button class="btn-glass btn-sci" data-value="sqrt" data-type="sci">√</button>
+        <button class="btn-glass btn-sci" data-value="x^y" data-type="sci">xʸ</button>
+        <button class="btn-glass btn-sci" data-value="x!" data-type="sci">x!</button>
+        <button class="btn-glass btn-sci" data-value="π" data-type="sci">π</button>
+        <button class="btn-glass btn-sci" data-value="e" data-type="sci">e</button>
+        <button class="btn-glass btn-sci" data-value="(" data-type="digit">(</button>
+        <button class="btn-glass btn-sci" data-value=")" data-type="digit">)</button>
+        <button class="btn-glass btn-sci" data-value="MC" data-type="action">MC</button>
+        <button class="btn-glass btn-sci" data-value="MR" data-type="action">MR</button>
+      </div>
+
+      <!-- Standard Keypad Grid -->
+      <div class="keypad-grid" id="keypadGrid">
+        <button class="btn-glass btn-action" data-value="AC" data-type="action">AC</button>
+        <button class="btn-glass btn-action" data-value="+/-" data-type="action">+/−</button>
+        <button class="btn-glass btn-operator" data-value="%" data-type="operator">%</button>
+        <button class="btn-glass btn-operator" data-value="÷" data-type="operator">÷</button>
+
+        <button class="btn-glass" data-value="7" data-type="digit">7</button>
+        <button class="btn-glass" data-value="8" data-type="digit">8</button>
+        <button class="btn-glass" data-value="9" data-type="digit">9</button>
+        <button class="btn-glass btn-operator" data-value="×" data-type="operator">×</button>
+
+        <button class="btn-glass" data-value="4" data-type="digit">4</button>
+        <button class="btn-glass" data-value="5" data-type="digit">5</button>
+        <button class="btn-glass" data-value="6" data-type="digit">6</button>
+        <button class="btn-glass btn-operator" data-value="−" data-type="operator">−</button>
+
+        <button class="btn-glass" data-value="1" data-type="digit">1</button>
+        <button class="btn-glass" data-value="2" data-type="digit">2</button>
+        <button class="btn-glass" data-value="3" data-type="digit">3</button>
+        <button class="btn-glass btn-operator" data-value="+" data-type="operator">+</button>
+
+        <button class="btn-glass" data-value="0" data-type="digit">0</button>
+        <button class="btn-glass" data-value="." data-type="digit">.</button>
+        <button class="btn-glass btn-action" data-value="DEL" data-type="action">DEL</button>
+        <button class="btn-glass btn-equals" data-value="=" data-type="equals">=</button>
+      </div>
+    </div>
+
+    <div class="advanced-panel" id="advancedPanel" aria-live="polite">
+      <div class="module-tabs" role="tablist" aria-label="Advanced modules">
+        <button class="module-tab active" data-module="stats" type="button">Stats</button>
+        <button class="module-tab" data-module="matrix" type="button">Matrix</button>
+        <button class="module-tab" data-module="complex" type="button">Complex</button>
+        <button class="module-tab" data-module="graph" type="button">Graph</button>
+        <button class="module-tab" data-module="units" type="button">Units</button>
+        <button class="module-tab" data-module="programming" type="button">Prog</button>
+        <button class="module-tab" data-module="calculus" type="button">Calculus</button>
+        <button class="module-tab" data-module="custom" type="button">Funcs</button>
+      </div>
+
+      <div class="module-content active" id="statsModule">
+        <label class="module-label" for="statsInput">Dataset</label>
+        <textarea id="statsInput" rows="3" placeholder="1, 2, 3, 4, 5"></textarea>
+        <div class="action-row">
+          <button class="module-btn" id="statsComputeBtn" type="button">Compute</button>
+          <button class="module-btn secondary" id="statsUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <div class="result-card" id="statsOutput"></div>
+      </div>
+
+      <div class="module-content" id="matrixModule">
+        <label class="module-label" for="matrixInput">Matrix</label>
+        <textarea id="matrixInput" rows="3" placeholder="1,2;3,4"></textarea>
+        <div class="action-row">
+          <button class="module-btn" id="matrixComputeBtn" type="button">Operate</button>
+          <button class="module-btn secondary" id="matrixUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <div class="result-card" id="matrixOutput"></div>
+      </div>
+
+      <div class="module-content" id="complexModule">
+        <label class="module-label" for="complexInput">Complex number</label>
+        <input id="complexInput" type="text" placeholder="3+4i" />
+        <div class="action-row">
+          <button class="module-btn" id="complexComputeBtn" type="button">Calculate</button>
+          <button class="module-btn secondary" id="complexUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <div class="result-card" id="complexOutput"></div>
+      </div>
+
+      <div class="module-content" id="graphModule">
+        <label class="module-label" for="graphInput">Function</label>
+        <input id="graphInput" type="text" placeholder="sin(x)" />
+        <div class="action-row">
+          <button class="module-btn" id="graphPlotBtn" type="button">Plot</button>
+          <button class="module-btn secondary" id="graphUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <canvas id="graphCanvas" width="320" height="220"></canvas>
+      </div>
+
+      <div class="module-content" id="unitsModule">
+        <label class="module-label" for="unitValue">Value</label>
+        <input id="unitValue" type="number" value="1" />
+        <div class="inline-fields">
+          <select id="unitCategory">
+            <option value="length">Length</option>
+            <option value="mass">Mass</option>
+            <option value="temperature">Temperature</option>
+            <option value="volume">Volume</option>
+            <option value="speed">Speed</option>
+          </select>
+          <select id="unitFrom"></select>
+          <select id="unitTo"></select>
+        </div>
+        <button class="module-btn" id="unitConvertBtn" type="button">Convert</button>
+        <div class="result-card" id="unitOutput"></div>
+      </div>
+
+      <div class="module-content" id="programmingModule">
+        <label class="module-label" for="programInput">Value</label>
+        <input id="programInput" type="number" value="10" />
+        <div class="action-row">
+          <button class="module-btn" id="programConvertBtn" type="button">Convert</button>
+          <button class="module-btn secondary" id="programBitBtn" type="button">Bitwise</button>
+        </div>
+        <div class="result-card" id="programOutput"></div>
+      </div>
+
+      <div class="module-content" id="calculusModule">
+        <label class="module-label" for="calcFunction">Function</label>
+        <input id="calcFunction" type="text" placeholder="x^2" />
+        <div class="inline-fields">
+          <input id="calcPoint" type="number" value="2" />
+          <select id="calcMode">
+            <option value="derivative">Derivative</option>
+            <option value="integral">Integral</option>
+            <option value="limit">Limit</option>
+          </select>
+        </div>
+        <button class="module-btn" id="calcRunBtn" type="button">Run</button>
+        <div class="result-card" id="calcOutput"></div>
+      </div>
+
+      <div class="module-content" id="customModule">
+        <label class="module-label" for="customInput">Function or variable</label>
+        <input id="customInput" type="text" placeholder="f(x)=x^2+2x+1" />
+        <div class="action-row">
+          <button class="module-btn" id="customSaveBtn" type="button">Save</button>
+          <button class="module-btn secondary" id="customUseExprBtn" type="button">Use current expression</button>
+        </div>
+        <div class="result-card" id="customOutput"></div>
+      </div>
+    </div>
+
+    <!-- 4. History Slide-Over Glass Drawer -->
+    <div class="history-drawer" id="historyDrawer">
+      <div class="history-header">
+        <div class="history-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>History Log</span>
+        </div>
+        <button class="icon-btn" id="closeHistoryBtn" title="Close History">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="history-list" id="historyList">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/mathEngine.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/advancedModules.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

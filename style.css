@@ -420,7 +420,126 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   6. CALCULATOR LAYOUT & KEYPADS
+   6. TABS & ADVANCED MODULES
+   -------------------------------------------------------------------------- */
+.tab-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tab-btn, .module-tab, .module-btn, .copy-btn {
+  border: 1px solid var(--glass-border);
+  background: var(--glass-surface);
+  color: var(--text-primary);
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.tab-btn[data-tab="basic"].active {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.tab-btn[data-tab="scientific"].active {
+  background: rgba(0, 243, 255, 0.18);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.tab-btn[data-tab="advanced"].active {
+  background: rgba(255, 0, 127, 0.18);
+  border-color: var(--accent-magenta);
+  color: var(--accent-magenta);
+}
+
+.module-tab.active {
+  background: rgba(0, 243, 255, 0.18);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.copy-btn {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  font-size: 0.8rem;
+}
+
+.advanced-panel {
+  display: none;
+  padding: 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  gap: 12px;
+}
+
+
+.module-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.module-content {
+  display: none;
+  gap: 8px;
+  flex-direction: column;
+}
+
+.module-content.active {
+  display: flex;
+}
+
+.module-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+textarea, input, select {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: rgba(0,0,0,0.3);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+}
+
+.action-row, .inline-fields {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.module-btn.secondary {
+  background: rgba(255,255,255,0.08);
+}
+
+.result-card {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  min-height: 48px;
+  color: var(--text-secondary);
+}
+
+#graphCanvas {
+  width: 100%;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.25);
+}
+
+/* --------------------------------------------------------------------------
+   7. CALCULATOR LAYOUT & KEYPADS
    -------------------------------------------------------------------------- */
 .calculator-body {
   display: grid;
@@ -430,24 +549,36 @@ body {
 }
 
 .calculator-container.scientific-active .calculator-body {
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: minmax(220px, 260px) 1fr;
 }
 
 .scientific-panel {
   display: none;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   padding-right: 12px;
   border-right: 1px solid var(--glass-border);
+  align-content: start;
 }
 
-.calculator-container.scientific-active .scientific-panel {
+.calculator-body.mode-scientific .scientific-panel,
+.calculator-body.mode-advanced .scientific-panel {
   display: grid;
+}
+
+.calculator-body.mode-basic .advanced-panel,
+.calculator-body.mode-scientific .advanced-panel {
+  display: none;
+}
+
+.calculator-body.mode-advanced .advanced-panel {
+  display: flex;
+  flex-direction: column;
 }
 
 .keypad-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -462,7 +593,7 @@ body {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
-  color: var(--text-primary);
+  color: #000000;
   font-family: var(--font-sans);
   font-size: 1.25rem;
   font-weight: 500;
@@ -529,7 +660,7 @@ body {
 
 /* Button Variants */
 .btn-operator {
-  color: var(--accent-cyan);
+  color: #000000;
   background: linear-gradient(135deg, rgba(0, 243, 255, 0.15) 0%, rgba(0, 243, 255, 0.03) 100%);
   border-color: rgba(0, 243, 255, 0.35);
   font-weight: 600;
@@ -543,7 +674,7 @@ body {
 }
 
 .btn-action {
-  color: var(--accent-magenta);
+  color: #000000;
   background: linear-gradient(135deg, rgba(255, 0, 127, 0.15) 0%, rgba(255, 0, 127, 0.03) 100%);
   border-color: rgba(255, 0, 127, 0.35);
   font-weight: 600;
@@ -575,9 +706,20 @@ body {
   height: 52px;
   font-size: 0.95rem;
   font-family: var(--font-mono);
-  color: var(--accent-purple);
+  color: #000000;
   background: linear-gradient(135deg, rgba(157, 78, 221, 0.12) 0%, rgba(157, 78, 221, 0.02) 100%);
   border-color: rgba(157, 78, 221, 0.3);
+}
+
+.calculator-body.mode-basic .btn-sci {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.calculator-body.mode-scientific .btn-sci,
+.calculator-body.mode-advanced .btn-sci {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .btn-sci:hover {
@@ -717,6 +859,19 @@ body {
 /* --------------------------------------------------------------------------
    9. RESPONSIVE DESIGN BREAKPOINTS
    -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .calculator-container.scientific-active .calculator-body {
+    grid-template-columns: 1fr;
+  }
+
+  .scientific-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--glass-border);
+    padding-right: 0;
+    padding-bottom: 12px;
+  }
+}
+
 @media (max-width: 640px) {
   body {
     padding: 12px;
